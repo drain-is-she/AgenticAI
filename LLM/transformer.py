@@ -1,3 +1,5 @@
+# self attention , multiattention , positional encoding , transformer encoder 
+# decoder , masked self attention 
 import torch 
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -22,5 +24,41 @@ class SelfAttention(nn.Module):
         output = torch.matmul(attention_weights,V)
 
         return output 
-    
 
+
+# each head tells different contexts and it is important for the transformer to 
+# understand the context better 
+class MultiAttention(nn.Module):
+    def __init__(self,d_model,num_heads):
+        super().__init__()
+
+        self.num_heads = num_heads 
+        self.heaf_dim = d_model 
+
+        self.Wq = nn.Linear(d_model,d_model)
+        self.Wk = nn.Linear(d_model,d_model)
+        self.Wv = nn.Linear(d_model,d_model)
+
+        self.fc = nn.Linear(d_model,d_model)
+
+    def forward(self,x):
+        B,T,C = x.shape 
+
+        Q = self.Wq(x)
+        K = self.Wk(x)
+        V = self.Wv(x)
+
+
+        
+
+
+
+
+
+
+
+
+
+
+        
+    
