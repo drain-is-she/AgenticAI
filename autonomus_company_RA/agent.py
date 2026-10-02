@@ -1,7 +1,5 @@
 import json 
 from tools import TOOLS 
-from langchain.chat_models import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
 MAX_STEPS = 5 # atmost 
 MODEL = "gpt-4o-mini"
 SYSTEM_PROMPT = """
@@ -124,19 +122,8 @@ messages = [
 #     messages = messages 
 # )
 
-#after introducing the langchain 
-llm = ChatOpenAI(
-    MODEL = ChatOpenAI(
-        model = "gpt-4o-mini", 
-        temprature = 0 
-    )
-)
-response = llm.invoke("Explain MAML ")
-#after introducing the langchain 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "Answer using the provided research context."),
-    ("human", "{question}\n\nContext:\n{context}")
-])
+
+
 # AGENT LOOP    
 MAX_STEPS = 5
 
@@ -170,12 +157,13 @@ for step in range(MAX_STEPS):
     print("\nOBSERVATION:")
     print(observation)
 
-    # STEP 7: maintain state
+   
+    # # STEP 7: maintain state
     messages.append({
         "role": "assistant",
         "content": assistant_message
     })
-
+   
     messages.append({
         "role": "user",
         "content": f"OBSERVATION:\n{observation}"
