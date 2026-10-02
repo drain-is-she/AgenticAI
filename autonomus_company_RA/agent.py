@@ -1,7 +1,7 @@
-from openai import OpenAI
 import json 
 from tools import TOOLS 
-client = OpenAI()
+from langchain.chat_models import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
 MAX_STEPS = 5 # atmost 
 MODEL = "gpt-4o-mini"
 SYSTEM_PROMPT = """
@@ -29,6 +29,8 @@ You have access to the following tools:
 
 6. save_report
    - Save the final research report.
+7. search_knowledge_base
+   - Search the knowledge base for relevant information.
 
 When you need to use a tool, output ONLY a JSON action:
 
@@ -85,6 +87,12 @@ Examples:
         "information": "Final research report..."
     }
 }
+{
+    "action": "search_knowledge_base",
+    "action_input": {
+        "query": "NVIDIA latest revenue"
+    }
+}
 
 IMPORTANT RULES:
 
@@ -110,14 +118,25 @@ messages = [
         "content" : "Find the latest revenue of NVIDIA."
     }
 ]
+# this part was used when i didnt use the langchain 
+# response = client.chat.completions.create(
+#     model = MODEL , 
+#     messages = messages 
+# )
 
-response = client.chat.completions.create(
-    model = MODEL , 
-    messages = messages 
+#after introducing the langchain 
+llm = ChatOpenAI(
+    MODEL = ChatOpenAI(
+        model = "gpt-4o-mini", 
+        temprature = 0 
+    )
 )
-
-print(response.choices[0].message.content)
-
+response = llm.invoke("Explain MAML ")
+#after introducing the langchain 
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "Answer using the provided research context."),
+    ("human", "{question}\n\nContext:\n{context}")
+])
 # AGENT LOOP    
 MAX_STEPS = 5
 
