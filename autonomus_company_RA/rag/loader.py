@@ -1,10 +1,11 @@
 import os 
 import fitz 
 from docx import Document 
-
+from langchain_community.document_loaders import pyPDFLoader
+loader = PyPDFLoader("/home/teamsr/Desktop/agentic/autonomus_company_RA/knowledge/attn.pdf")
 def read_documents(path):
     # how do we ensure that the [1] will get us extension ??
-    extension = os.path.splittext(path)[1].lower()
+    extension = os.path.splitext(path)[1].lower()
     if extension == ".pdf":
         document = fitz.open(path)
         text = " "

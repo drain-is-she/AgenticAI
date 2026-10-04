@@ -1,6 +1,6 @@
 from loader import read_documents
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 text = read_documents(r"")
-
 # without overlap just raw chunking 
 # def chunk_text(text , chunk_size= 500 , overlap= 50 ):
 #     words = text.split()
@@ -28,3 +28,4 @@ def chunk_text(text, chunk_size=100, overlap=20):
         start = end - overlap
 
     return chunks
+
