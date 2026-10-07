@@ -18,3 +18,9 @@ For example below is the brief of the work flow that was followed while learning
 | **14** | LangGraph + RAG | Production-style agent |
 | **15** | LangGraph + memory | Persistent agent |
 | **16** | Multi-agent orchestration | Multiple specialized agents |
+
+
+
+
+
+this whole repo is project centric and we will proceed further that way onlu 
