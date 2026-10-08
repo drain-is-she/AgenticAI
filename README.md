@@ -1,5 +1,5 @@
 This repository aims to make a consistent workflow on how to cover agentic ai from scratch with no frameworks and then after encountering the scracth build the next aim will be to build the agent with the help of the frame works 
-For example below is the brief of the work flow that was followed while learning the Agentic AI 
+For example below is the brief of the work flow that was followed while learning this whole cpurse 
 | Stage | Build | Main concept |
 |---|---|---|
 |**1**| LLM | Generation |
