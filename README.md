@@ -12,13 +12,25 @@ A learning repository exploring document retrieval and tool-using research assis
 
 ## Current limitations
 
-The agent draft needs fixes before it is ready to run: the input field is spelled `messgaes`, its final response is not printed, and the exit check includes a trailing space. A tested dependency specification and automated checks have not yet been added. API-backed components require separately configured credentials and may incur provider charges.
+The terminal query loop sends the `messages` field, prints the final response content, skips blank input, and accepts `exit` regardless of case or surrounding whitespace. EOF and Ctrl+C at the input prompt also exit cleanly. Each query is independent; conversation memory is not implemented.
+
+A tested dependency specification and end-to-end retrieval/model verification are still needed. API-backed components require separately configured credentials and may incur provider charges. The offline tests below verify terminal-loop behavior only; they do not establish that the full research assistant is ready to run.
 
 Keep local credentials in environment variables or an ignored `.env` file. Do not add credentials to source code or notebooks.
 
+## Offline regression tests
+
+From the repository root, run:
+
+```sh
+python -m unittest discover -s tests -v
+```
+
+The five tests use a fake agent and Python’s standard library, with no API keys, network requests, model downloads, or LangChain installation. They cover the request schema, displayed answers, multiple independent queries, blank input, exit variants, and terminal closure. Framework and retrieval imports are deferred until `build_agent()` is called so the terminal loop can be tested independently.
+
 ## Next milestones
 
-1. Repair and test the query/response loop.
+1. Validate the complete agent setup and add retrieval/tool integration tests.
 2. Document and pin a verified dependency environment.
 3. Add a small retrieval evaluation set and cite source passages in responses.
 4. Separate completed examples from planned orchestration experiments.

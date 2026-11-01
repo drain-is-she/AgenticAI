@@ -1,13 +1,13 @@
-from langchain.agents import create_agent 
-from langchain_openai import ChatOpenAI
-from rag.loader import load_documents
-from rag.chunking import chunk_documents
-from rag.embedding import get_embeddings 
-from rag.vector_store import create_vector_store
-from rag.retrieval import create_retriever  
-from tools.tools import create_research_tool 
-
 def build_agent():
+    from langchain.agents import create_agent
+    from langchain_openai import ChatOpenAI
+    from rag.loader import load_documents
+    from rag.chunking import chunk_documents
+    from rag.embedding import get_embeddings
+    from rag.vector_store import create_vector_store
+    from rag.retrieval import create_retriever
+    from tools.tools import create_research_tool
+
 
     documents = load_documents("knowledge")
     chunks = chunk_documents(documents)
@@ -30,24 +30,28 @@ def build_agent():
     return agent 
 
 
-def main():
-    agent = build_agent()
+def run_chat(agent, input_fn=input, output_fn=print):
+    """Run independent research queries against an already-built agent."""
     while True:
-        query = input("\n You : ")
-        if query.lower() =="exit ": 
-            break 
-        result = agent.invoke(
-            {
-                "messgaes":[
-                    {
-                        "role":"user" , 
-                        "content" : query 
-                    }
-                ]
-            }
-        )
+        try:
+            query = input_fn("\n You : ").strip()
+        except (EOFError, KeyboardInterrupt):
+            break
+        if query.lower() == "exit":
+            break
+        if not query:
+            continue
 
+        result = agent.invoke({
+            "messages": [{"role": "user", "content": query}]
+        })
         final_message = result["messages"][-1]
+        output_fn(final_message.content)
+
+
+def main():
+    run_chat(build_agent())
+
 
 if __name__ == "__main__":
     main()
