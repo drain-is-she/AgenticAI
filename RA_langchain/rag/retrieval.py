@@ -4,6 +4,3 @@ def create_retriever(vector_store):
             "k": 5
         }
     )
-docs = retriever.invoke(
-    "What is machine learning?"
-)

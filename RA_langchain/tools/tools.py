@@ -23,4 +23,3 @@ def create_research_tool(retriever):
         return "\n\n".join(results)
 
     return research_search
-research_tool = create_research_tool(retriever)

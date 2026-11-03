@@ -14,7 +14,7 @@ A learning repository exploring document retrieval and tool-using research assis
 
 The terminal query loop sends the `messages` field, prints the final response content, skips blank input, and accepts `exit` regardless of case or surrounding whitespace. EOF and Ctrl+C at the input prompt also exit cleanly. Each query is independent; conversation memory is not implemented.
 
-A tested dependency specification and end-to-end retrieval/model verification are still needed. API-backed components require separately configured credentials and may incur provider charges. The offline tests below verify terminal-loop behavior only; they do not establish that the full research assistant is ready to run.
+A tested dependency specification and end-to-end retrieval/model verification are still needed. API-backed components require separately configured credentials and may incur provider charges. The offline tests below verify terminal-loop behavior and retrieval wiring with test doubles; they do not establish that the full research assistant is ready to run.
 
 Keep local credentials in environment variables or an ignored `.env` file. Do not add credentials to source code or notebooks.
 
@@ -26,7 +26,9 @@ From the repository root, run:
 python -m unittest discover -s tests -v
 ```
 
-The five tests use a fake agent and Python’s standard library, with no API keys, network requests, model downloads, or LangChain installation. They cover the request schema, displayed answers, multiple independent queries, blank input, exit variants, and terminal closure. Framework and retrieval imports are deferred until `build_agent()` is called so the terminal loop can be tested independently.
+The ten tests use fake agents/retrievers and Python’s standard library, with no API keys, network requests, model downloads, or LangChain installation. They cover the request schema, displayed answers, multiple independent queries, blank input, exit variants, and terminal closure. Framework and retrieval imports are deferred until `build_agent()` is called so the terminal loop can be tested independently. Retrieval tests also check import safety, top-five configuration, source/page formatting, missing metadata, and empty results. The LangChain tool decorator is replaced with a test double; framework schema validation and actual PDF/vector search are not covered.
+
+Retrieval modules define factories without executing example queries at import time. Call `create_retriever(vector_store)` and `create_research_tool(retriever)` with initialized dependencies before searching.
 
 ## Next milestones
 
