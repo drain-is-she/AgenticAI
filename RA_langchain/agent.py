@@ -9,7 +9,7 @@ def build_agent():
     from tools.tools import create_research_tool
 
 
-    documents = load_documents("knowledge")
+    documents = load_documents()
     chunks = chunk_documents(documents)
     embeddings = get_embeddings()
     vector_store = create_vector_store(chunks , embeddings)

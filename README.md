@@ -18,6 +18,12 @@ A tested dependency specification and end-to-end retrieval/model verification ar
 
 Keep local credentials in environment variables or an ignored `.env` file. Do not add credentials to source code or notebooks.
 
+## Document paths
+
+Both research entry points call `load_documents()` to locate the bundled `RA_langchain/knowledge/` directory relative to the loader file, independent of the terminal’s current directory. For a custom location, call `load_documents(path)`; explicit relative paths remain relative to the caller’s working directory. The loader reads top-level `*.pdf` files in sorted order and preserves page metadata while labeling each source with its filename.
+
+Missing directories, paths that are files, directories without PDFs, and PDFs yielding no pages raise clear errors before the embedding/vector-store steps. Dependency setup and actual PDF parsing still need end-to-end verification.
+
 ## Offline regression tests
 
 From the repository root, run:
@@ -26,7 +32,7 @@ From the repository root, run:
 python -m unittest discover -s tests -v
 ```
 
-The ten tests use fake agents/retrievers and Python’s standard library, with no API keys, network requests, model downloads, or LangChain installation. They cover the request schema, displayed answers, multiple independent queries, blank input, exit variants, and terminal closure. Framework and retrieval imports are deferred until `build_agent()` is called so the terminal loop can be tested independently. Retrieval tests also check import safety, top-five configuration, source/page formatting, missing metadata, and empty results. The LangChain tool decorator is replaced with a test double; framework schema validation and actual PDF/vector search are not covered.
+The sixteen tests use fake agents/retrievers and a fake PDF parser and Python’s standard library, with no API keys, network requests, model downloads, or LangChain installation. They cover the request schema, displayed answers, multiple independent queries, blank input, exit variants, and terminal closure. Framework and retrieval imports are deferred until `build_agent()` is called so the terminal loop can be tested independently. Retrieval tests also check import safety, top-five configuration, source/page formatting, missing metadata, and empty results. Loader tests cover default paths from another working directory, custom directories, file ordering, metadata, and invalid/empty input. The LangChain tool decorator and PDF parser are replaced with test doubles; framework schema validation and actual PDF/vector search are not covered.
 
 Retrieval modules define factories without executing example queries at import time. Call `create_retriever(vector_store)` and `create_research_tool(retriever)` with initialized dependencies before searching.
 

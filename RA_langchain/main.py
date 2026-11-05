@@ -7,7 +7,7 @@ from rag.retrieval import create_retriever
 
 def main():
 
-    documents = load_documents("knowledge")
+    documents = load_documents()
 
     print("Documents:", len(documents))
 
