@@ -1,4 +1,6 @@
-# Offline PDF parsing and tool-wrapper checks; not the complete agent runtime.
+# Offline PDF, vector-search, and tool-wrapper checks; not the complete agent runtime.
 langchain-community==0.4.2
 langchain-core==1.7.6
 pypdf==7.0.0
+
+faiss-cpu==1.15.1

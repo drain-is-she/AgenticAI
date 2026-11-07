@@ -38,7 +38,7 @@ Retrieval modules define factories without executing example queries at import t
 
 ## Real offline integration checks
 
-A separate optional suite uses the actual `PyPDFLoader`/pypdf parser and LangChain tool decorator. It generates an original one-page text PDF, verifies extracted text and source/page metadata, and passes that evidence through the real tool wrapper with a local fake retriever.
+A separate optional suite uses the actual `PyPDFLoader`/pypdf parser, FAISS CPU index, LangChain retriever, and tool decorator. Two checks generate an original one-page text PDF, verify extracted text and source/page metadata, and pass that evidence through the real tool wrapper with a local fake retriever. Three additional checks build a real FAISS index with deterministic numeric vectors, verify query-dependent distance ordering and the five-result limit, handle a corpus smaller than five documents, and preserve source/page labels through the tool wrapper.
 
 ```sh
 python -m venv .venv
@@ -48,13 +48,13 @@ python -m pip check
 LANGSMITH_TRACING=false LANGCHAIN_TRACING_V2=false python -m unittest discover -s tests/integration -v
 ```
 
-Validated on Python 3.13 with the direct dependency versions pinned in `requirements-integration.txt`. Transitive dependencies are resolved by pip; this is not a complete environment lock or the full assistant runtime. Package installation requires network access; the two tests themselves need no credentials, models, embeddings, or API calls and reject socket connections during test execution. On Windows, activate `.venv\Scripts\activate` and set the two tracing environment variables to `false` before running the Python test command.
+Validated on Python 3.13 with the direct dependency versions pinned in `requirements-integration.txt`. Transitive dependencies are resolved by pip; this is not a complete environment lock or the full assistant runtime. Package installation requires network access; the five tests themselves need no credentials, learned embedding models, or API calls and reject socket connections during test execution. On Windows, activate `.venv\Scripts\activate` and set the two tracing environment variables to `false` before running the Python test command.
 
-The default `tests/` discovery above deliberately remains dependency-free; run the integration command separately. These checks do not validate real vector search, arbitrary scanned PDFs/OCR, the bundled research corpus, or model-generated answers.
+The default `tests/` discovery above deliberately remains dependency-free; run the integration command separately. The vector tests use explicit numeric coordinates so expected nearest neighbors are known. They validate index/retriever wiring, not semantic relevance or embedding quality. These checks do not validate arbitrary scanned PDFs/OCR, the bundled research corpus, or model-generated answers.
 
 ## Next milestones
 
-1. Validate the complete agent setup and add vector-search integration tests.
+1. Validate the complete agent setup, including chunking and the runtime dependency environment.
 2. Document and pin a verified dependency environment.
 3. Add a small retrieval evaluation set and cite source passages in responses.
 4. Separate completed examples from planned orchestration experiments.
